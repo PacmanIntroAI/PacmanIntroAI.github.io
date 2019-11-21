@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>pacman.util API documentation</title>
+<meta name="description" content="This file contains utility functions and classes such as
+Vectors and Queues which are important for the assignments." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pacman.util</code></h1>
+</header>
+<section id="section-intro">
+<p>This file contains utility functions and classes such as
+Vectors and Queues which are important for the assignments.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This file contains utility functions and classes such as
+Vectors and Queues which are important for the assignments.
+&#34;&#34;&#34;
+
+import enum
+import math
+import numbers
+import queue
+from typing import List, NamedTuple, Tuple
+
+from pacman.tech_util import classproperty
+
+
+class PriorityFunctionQueue(queue.PriorityQueue):
+    &#34;&#34;&#34;
+    A queue based on the classes in the standard library `queue` module,
+    which uses a given function to determine the priority of each given item.
+    For example:
+      queue = PriorityFunctionQueue(some_function)
+      queue.put(an_element)
+      the_element = queue.get()
+    &#34;&#34;&#34;
+
+    def __init__(self, priority_fn=lambda x: 0):
+        super().__init__()
+        self.priority_fn = priority_fn
+        self.mapping = {}
+        self.next_id = 0
+
+    def put(self, item, *args, **kwargs):
+        priority = self.priority_fn(item)
+        self.mapping[self.next_id] = item
+        super().put((priority, self.next_id), *args, **kwargs)
+        self.next_id += 1
+
+    def get(self, *args, **kwargs):
+        _, ident = super().get(*args, **kwargs)
+        return self.mapping[ident]
+
+
+class Vector(NamedTuple(&#39;Vector&#39;, [(&#39;x&#39;, int), (&#39;y&#39;, int)])):
+    &#34;&#34;&#34;
+    A 2D vector, representing a position or movement in 2D space.
+    &#34;&#34;&#34;
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def zero(cls) -&gt; &#39;Vector&#39;:
+        &#34;&#34;&#34;
+        The zero vector.
+        &#34;&#34;&#34;
+        return Vector(0, 0)
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def unit(cls) -&gt; &#39;Vector&#39;:
+        &#34;&#34;&#34;
+        The unit vector.
+        &#34;&#34;&#34;
+        return Vector(1, 1)
+
+    def __add__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x + other, self.y + other)
+        else:
+            return super().__add__(other)
+
+    def __sub__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x - other, self.y - other)
+        else:
+            return super().__sub__(other)
+
+    def __mul__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x * other, self.y * other)
+        else:
+            return super().__mul__(other)
+
+    def __rmul__(self, other) -&gt; &#39;Vector&#39;:
+        return self.__mul__(other)
+
+    def __truediv__(self, other: numbers.Number) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x / other.x, self.y / other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x / other, self.y / other)
+        else:
+            return super().__truediv__(other)
+
+    def __floordiv__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x // other.x, self.y // other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x // other, self.y // other)
+        else:
+            return super().__floordiv__(other)
+
+    def __abs__(self) -&gt; &#39;Vector&#39;:
+        return Vector(abs(self.x), abs(self.y))
+
+    def __pow__(self, power, modulo=None):
+        if isinstance(power, numbers.Number):
+            return Vector(pow(self.x, power, modulo), pow(self.y, power, modulo))
+        else:
+            super().__pow__(power, modulo)
+
+
+class Move(enum.Enum):
+    &#34;&#34;&#34;
+    An enumeration of types representing standard movements in the Pacman world.
+    &#34;&#34;&#34;
+    up = Vector(0, 1)
+    down = Vector(0, -1)
+    right = Vector(1, 0)
+    left = Vector(-1, 0)
+    stop = Vector(0, 0)
+
+    @property
+    def vector(self) -&gt; Vector:
+        &#34;&#34;&#34;
+        The vector describing the movement.
+        &#34;&#34;&#34;
+        return self.value
+
+    @property
+    def opposite(self) -&gt; &#39;Move&#39;:
+        &#34;&#34;&#34;
+        The opposite of the given movement.
+        &#34;&#34;&#34;
+        if self == Move.stop:
+            return Move.stop
+        else:
+            return Move.by_index(self.index + 1 - 2 * (self.index % 2))
+
+    @property
+    def degrees(self) -&gt; float:
+        &#34;&#34;&#34;
+        The movement vector converted to degrees.
+        &#34;&#34;&#34;
+        return 180 / math.pi * math.atan2(self.vector.y, self.vector.x)
+
+    @property
+    def index(self) -&gt; int:
+        &#34;&#34;&#34;
+        The index of the movement as defined in the enumeration.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return list(Move).index(self)
+
+    @classmethod
+    def by_index(cls, i) -&gt; &#39;Move&#39;:
+        &#34;&#34;&#34;
+        Get a Move by index as defined in the enumeration.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return list(cls)[i]
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def no_stop(cls) -&gt; List[&#39;Move&#39;]:
+        &#34;&#34;&#34;
+        Get all moves except stop.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return [move for move in cls if move != cls.stop]
+    
+    def __lt__(self, other):
+        &#34;&#34;&#34;
+        Comparing two Moves: is self &lt; other true? Required to sort Moves
+        &#34;&#34;&#34;
+        if isinstance(other, Move):
+            return self.value &lt; other.value
+        else:
+            return NotImplemented
+
+
+def manhattan(vector1: Vector, vector2: Vector) -&gt; int:
+    &#34;&#34;&#34;
+    The manhattan distance between the two vectors.
+    &#34;&#34;&#34;
+    return sum(abs(vector1 - vector2))
+
+
+def euclidean(vector1: Vector, vector2: Vector) -&gt; float:
+    &#34;&#34;&#34;
+    The euclidean distance between the two vectors.
+    &#34;&#34;&#34;
+    return math.sqrt(sum((vector1 - vector2) ** 2))
+
+
+# a (probability) distribution consists of values and associated weights
+Distribution = Tuple[List[Move], List[float]]</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pacman.util.euclidean"><code class="name flex">
+<span>def <span class="ident">euclidean</span></span>(<span>vector1, vector2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The euclidean distance between the two vectors.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def euclidean(vector1: Vector, vector2: Vector) -&gt; float:
+    &#34;&#34;&#34;
+    The euclidean distance between the two vectors.
+    &#34;&#34;&#34;
+    return math.sqrt(sum((vector1 - vector2) ** 2))</code></pre>
+</details>
+</dd>
+<dt id="pacman.util.manhattan"><code class="name flex">
+<span>def <span class="ident">manhattan</span></span>(<span>vector1, vector2)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The manhattan distance between the two vectors.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def manhattan(vector1: Vector, vector2: Vector) -&gt; int:
+    &#34;&#34;&#34;
+    The manhattan distance between the two vectors.
+    &#34;&#34;&#34;
+    return sum(abs(vector1 - vector2))</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pacman.util.Move"><code class="flex name class">
+<span>class <span class="ident">Move</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Move(enum.Enum):
+    &#34;&#34;&#34;
+    An enumeration of types representing standard movements in the Pacman world.
+    &#34;&#34;&#34;
+    up = Vector(0, 1)
+    down = Vector(0, -1)
+    right = Vector(1, 0)
+    left = Vector(-1, 0)
+    stop = Vector(0, 0)
+
+    @property
+    def vector(self) -&gt; Vector:
+        &#34;&#34;&#34;
+        The vector describing the movement.
+        &#34;&#34;&#34;
+        return self.value
+
+    @property
+    def opposite(self) -&gt; &#39;Move&#39;:
+        &#34;&#34;&#34;
+        The opposite of the given movement.
+        &#34;&#34;&#34;
+        if self == Move.stop:
+            return Move.stop
+        else:
+            return Move.by_index(self.index + 1 - 2 * (self.index % 2))
+
+    @property
+    def degrees(self) -&gt; float:
+        &#34;&#34;&#34;
+        The movement vector converted to degrees.
+        &#34;&#34;&#34;
+        return 180 / math.pi * math.atan2(self.vector.y, self.vector.x)
+
+    @property
+    def index(self) -&gt; int:
+        &#34;&#34;&#34;
+        The index of the movement as defined in the enumeration.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return list(Move).index(self)
+
+    @classmethod
+    def by_index(cls, i) -&gt; &#39;Move&#39;:
+        &#34;&#34;&#34;
+        Get a Move by index as defined in the enumeration.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return list(cls)[i]
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def no_stop(cls) -&gt; List[&#39;Move&#39;]:
+        &#34;&#34;&#34;
+        Get all moves except stop.
+        &#34;&#34;&#34;
+        # noinspection PyTypeChecker
+        return [move for move in cls if move != cls.stop]
+    
+    def __lt__(self, other):
+        &#34;&#34;&#34;
+        Comparing two Moves: is self &lt; other true? Required to sort Moves
+        &#34;&#34;&#34;
+        if isinstance(other, Move):
+            return self.value &lt; other.value
+        else:
+            return NotImplemented</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.util.Move.down"><code class="name">var <span class="ident">down</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+</dd>
+<dt id="pacman.util.Move.left"><code class="name">var <span class="ident">left</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+</dd>
+<dt id="pacman.util.Move.right"><code class="name">var <span class="ident">right</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+</dd>
+<dt id="pacman.util.Move.stop"><code class="name">var <span class="ident">stop</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+</dd>
+<dt id="pacman.util.Move.up"><code class="name">var <span class="ident">up</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration of types representing standard movements in the Pacman world.</p></section>
+</dd>
+</dl>
+</dd>
+<dt id="pacman.util.PriorityFunctionQueue"><code class="flex name class">
+<span>class <span class="ident">PriorityFunctionQueue</span></span>
+<span>(</span><span>priority_fn=&lt;function PriorityFunctionQueue.&lt;lambda&gt;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A queue based on the classes in the standard library <code>queue</code> module,
+which uses a given function to determine the priority of each given item.
+For example:
+queue = PriorityFunctionQueue(some_function)
+queue.put(an_element)
+the_element = queue.get()</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PriorityFunctionQueue(queue.PriorityQueue):
+    &#34;&#34;&#34;
+    A queue based on the classes in the standard library `queue` module,
+    which uses a given function to determine the priority of each given item.
+    For example:
+      queue = PriorityFunctionQueue(some_function)
+      queue.put(an_element)
+      the_element = queue.get()
+    &#34;&#34;&#34;
+
+    def __init__(self, priority_fn=lambda x: 0):
+        super().__init__()
+        self.priority_fn = priority_fn
+        self.mapping = {}
+        self.next_id = 0
+
+    def put(self, item, *args, **kwargs):
+        priority = self.priority_fn(item)
+        self.mapping[self.next_id] = item
+        super().put((priority, self.next_id), *args, **kwargs)
+        self.next_id += 1
+
+    def get(self, *args, **kwargs):
+        _, ident = super().get(*args, **kwargs)
+        return self.mapping[ident]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>queue.PriorityQueue</li>
+<li>queue.Queue</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.util.PriorityFunctionQueue.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Remove and return an item from the queue.</p>
+<p>If optional args 'block' is true and 'timeout' is None (the default),
+block if necessary until an item is available. If 'timeout' is
+a non-negative number, it blocks at most 'timeout' seconds and raises
+the Empty exception if no item was available within that time.
+Otherwise ('block' is false), return an item if one is immediately
+available, else raise the Empty exception ('timeout' is ignored
+in that case).</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get(self, *args, **kwargs):
+    _, ident = super().get(*args, **kwargs)
+    return self.mapping[ident]</code></pre>
+</details>
+</dd>
+<dt id="pacman.util.PriorityFunctionQueue.put"><code class="name flex">
+<span>def <span class="ident">put</span></span>(<span>self, item, *args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Put an item into the queue.</p>
+<p>If optional args 'block' is true and 'timeout' is None (the default),
+block if necessary until a free slot is available. If 'timeout' is
+a non-negative number, it blocks at most 'timeout' seconds and raises
+the Full exception if no free slot was available within that time.
+Otherwise ('block' is false), put an item on the queue if a free slot
+is immediately available, else raise the Full exception ('timeout'
+is ignored in that case).</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def put(self, item, *args, **kwargs):
+    priority = self.priority_fn(item)
+    self.mapping[self.next_id] = item
+    super().put((priority, self.next_id), *args, **kwargs)
+    self.next_id += 1</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pacman.util.Vector"><code class="flex name class">
+<span>class <span class="ident">Vector</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A 2D vector, representing a position or movement in 2D space.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Vector(NamedTuple(&#39;Vector&#39;, [(&#39;x&#39;, int), (&#39;y&#39;, int)])):
+    &#34;&#34;&#34;
+    A 2D vector, representing a position or movement in 2D space.
+    &#34;&#34;&#34;
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def zero(cls) -&gt; &#39;Vector&#39;:
+        &#34;&#34;&#34;
+        The zero vector.
+        &#34;&#34;&#34;
+        return Vector(0, 0)
+
+    # noinspection PyMethodParameters
+    @classproperty
+    def unit(cls) -&gt; &#39;Vector&#39;:
+        &#34;&#34;&#34;
+        The unit vector.
+        &#34;&#34;&#34;
+        return Vector(1, 1)
+
+    def __add__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x + other.x, self.y + other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x + other, self.y + other)
+        else:
+            return super().__add__(other)
+
+    def __sub__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x - other, self.y - other)
+        else:
+            return super().__sub__(other)
+
+    def __mul__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x * other.x, self.y * other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x * other, self.y * other)
+        else:
+            return super().__mul__(other)
+
+    def __rmul__(self, other) -&gt; &#39;Vector&#39;:
+        return self.__mul__(other)
+
+    def __truediv__(self, other: numbers.Number) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x / other.x, self.y / other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x / other, self.y / other)
+        else:
+            return super().__truediv__(other)
+
+    def __floordiv__(self, other) -&gt; &#39;Vector&#39;:
+        if isinstance(other, Vector):
+            return Vector(self.x // other.x, self.y // other.y)
+        elif isinstance(other, numbers.Number):
+            return Vector(self.x // other, self.y // other)
+        else:
+            return super().__floordiv__(other)
+
+    def __abs__(self) -&gt; &#39;Vector&#39;:
+        return Vector(abs(self.x), abs(self.y))
+
+    def __pow__(self, power, modulo=None):
+        if isinstance(power, numbers.Number):
+            return Vector(pow(self.x, power, modulo), pow(self.y, power, modulo))
+        else:
+            super().__pow__(power, modulo)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.tuple</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.util.Vector.unit"><code class="name">var <span class="ident">unit</span></code></dt>
+<dd>
+<section class="desc"><p>A 2D vector, representing a position or movement in 2D space.</p></section>
+</dd>
+<dt id="pacman.util.Vector.zero"><code class="name">var <span class="ident">zero</span></code></dt>
+<dd>
+<section class="desc"><p>A 2D vector, representing a position or movement in 2D space.</p></section>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pacman" href="index.html">pacman</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pacman.util.euclidean" href="#pacman.util.euclidean">euclidean</a></code></li>
+<li><code><a title="pacman.util.manhattan" href="#pacman.util.manhattan">manhattan</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pacman.util.Move" href="#pacman.util.Move">Move</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.util.Move.down" href="#pacman.util.Move.down">down</a></code></li>
+<li><code><a title="pacman.util.Move.left" href="#pacman.util.Move.left">left</a></code></li>
+<li><code><a title="pacman.util.Move.right" href="#pacman.util.Move.right">right</a></code></li>
+<li><code><a title="pacman.util.Move.stop" href="#pacman.util.Move.stop">stop</a></code></li>
+<li><code><a title="pacman.util.Move.up" href="#pacman.util.Move.up">up</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.util.PriorityFunctionQueue" href="#pacman.util.PriorityFunctionQueue">PriorityFunctionQueue</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.util.PriorityFunctionQueue.get" href="#pacman.util.PriorityFunctionQueue.get">get</a></code></li>
+<li><code><a title="pacman.util.PriorityFunctionQueue.put" href="#pacman.util.PriorityFunctionQueue.put">put</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.util.Vector" href="#pacman.util.Vector">Vector</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.util.Vector.unit" href="#pacman.util.Vector.unit">unit</a></code></li>
+<li><code><a title="pacman.util.Vector.zero" href="#pacman.util.Vector.zero">zero</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

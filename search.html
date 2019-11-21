@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>pacman.search API documentation</title>
+<meta name="description" content="This file contains classes and functions that are used by the SearchAgent (see agents.py)." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pacman.search</code></h1>
+</header>
+<section id="section-intro">
+<p>This file contains classes and functions that are used by the SearchAgent (see agents.py).</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This file contains classes and functions that are used by the SearchAgent (see agents.py).
+&#34;&#34;&#34;
+
+import abc
+import sys
+from typing import Any, Callable, FrozenSet, Generic, List, NamedTuple, Tuple, TypeVar
+
+from . import array, gamestate, util
+
+
+StateType = TypeVar(&#39;StateType&#39;)
+&#34;&#34;&#34;A search space consists of states which are of a certain type.
+This variable represents a generic state type for a search space&#34;&#34;&#34;
+
+
+Successor = Tuple[StateType, List[util.Move], float]
+&#34;&#34;&#34;When transitions (moves) are applied to states in a search space,
+the new states that are reached are called successors.
+A Successor is a tuple that contains the successor state, a list of moves 
+that was used to transition to it, and the cost of making this transition&#34;&#34;&#34;
+&#34;&#34;&#34;
+Search representations
+&#34;&#34;&#34;
+
+
+class SearchRepresentation(abc.ABC, Generic[StateType]):
+    &#34;&#34;&#34;
+    A SearchRepresentation defines a search space.
+    It does so by defining the start state,
+    the goal test, and the successor function.
+    In addition the representation can calculate the
+    path cost of a path through the space.
+
+    A SearchRepresentation uses a StateType
+    the definition of its methods, which
+    is simply the type of the states in the search space.
+
+    A search representation also keeps track of
+    the expansion order of states, which are used
+    later by SearchAgent for its cell values.
+    &#34;&#34;&#34;
+
+    def __init__(self, gstate: gamestate.Gamestate):
+        self.expansion_count = 0
+        self.expansion_order = array.Array([[None] * gstate.shape.y for _ in range(gstate.shape.x)])
+
+    @property
+    @abc.abstractmethod
+    def start(self) -&gt; StateType:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        pass
+
+    def is_goal(self, state: StateType) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        self.expansion_order[state] = self.expansion_count
+        self.expansion_count += 1
+        return False
+
+    @abc.abstractmethod
+    def successors(self, state: StateType) -&gt; List[Successor[StateType]]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        pass
+
+    @abc.abstractmethod
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        pass
+
+
+# A path cost function is a function used to compute the cost of a path
+# In this course, we only use cost functions assigning a cost to the state (position) we land on after every move
+PathCostFunction = Callable[[util.Vector], float]
+
+
+def standard_pathcost(path: List[util.Move], start: StateType, walls: array.Array,
+                      cost_fn: PathCostFunction = lambda x: 1
+                      ) -&gt; float:
+    &#34;&#34;&#34;
+    A helper function that calculates the cost of a list of moves,
+    with the possibility to give a cost function that defines
+    the cost of each move.
+    &#34;&#34;&#34;
+    vector = start
+    cost = 0
+    for direction in path:
+        vector += direction.vector
+        if walls[vector]:
+            return float(&#39;inf&#39;)
+        cost += cost_fn(vector)
+    return cost
+
+
+class PositionSearchRepresentation(SearchRepresentation[util.Vector]):
+    &#34;&#34;&#34;
+    A search representation that has as its goal a certain position.
+    Its state type is a Vector.
+    &#34;&#34;&#34;
+    PositionSuccessor = Successor[util.Vector]  # the successor type is based on the state type (Vector)
+
+    def __init__(self, gstate: gamestate.Gamestate,
+                 goal: util.Vector = util.Vector(1, 1),
+                 cost_fn: PathCostFunction = lambda x: 1) -&gt; None:
+        super().__init__(gstate)
+        self.start_state = gstate.pacman
+        self.goal = goal
+        self.cost_fn = cost_fn
+        self.walls = gstate.walls
+
+    @property
+    def start(self) -&gt; util.Vector:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        return self.start_state
+
+    def is_goal(self, state: util.Vector) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        super().is_goal(state)
+        return state == self.goal
+
+    def successors(self, state) -&gt; List[PositionSuccessor]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        successors = []
+        for move in util.Move.no_stop:
+            new_vector = state + move.vector
+            if not self.walls[new_vector]:
+                cost = self.cost_fn(new_vector)
+                successor = (new_vector, [move], cost)
+                successors.append(successor)
+        return successors
+
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        return standard_pathcost(path, self.start, self.walls, self.cost_fn)
+
+
+# the search state type for the AllDotSearchRepresentation.
+# this state type consists of a tuple of two values:
+# a vector indicating the position of Pacman,
+# and a list of Vectors indicating the positions of dots in the maze.
+AllDotSearchState = NamedTuple(&#39;AllDotSearchState&#39;, [(&#39;vector&#39;, util.Vector), (&#39;dots&#39;, FrozenSet[util.Vector])])
+
+
+class AllDotSearchRepresentation(SearchRepresentation[AllDotSearchState]):
+    &#34;&#34;&#34;
+    This representation defines a search space where the goal is to find all dots in the maze.
+    &#34;&#34;&#34;
+    AllDotSuccessor = Successor[AllDotSearchState]  # the successor type is based on the state type
+
+    def __init__(self, gstate: gamestate.Gamestate) -&gt; None:
+        super().__init__(gstate)
+        self.start_state = AllDotSearchState(gstate.pacman, frozenset(gstate.dots.list()))
+        self.walls = gstate.walls
+
+    @property
+    def start(self) -&gt; AllDotSearchState:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        return self.start_state
+
+    def is_goal(self, state: AllDotSearchState) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        super().is_goal(state.vector)
+        return not state.dots
+
+    def successors(self, state: AllDotSearchState) -&gt; List[AllDotSuccessor]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        successors = []
+        for move in util.Move.no_stop:
+            new_vector = state.vector + move.vector
+            if not self.walls[new_vector]:
+                new_dots = state.dots - {new_vector}
+                successor = (AllDotSearchState(new_vector, new_dots), [move], 1)
+                successors.append(successor)
+        return successors
+
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        return standard_pathcost(path, self.start_state.vector, self.walls)
+
+
+&#34;&#34;&#34;
+Search methods
+&#34;&#34;&#34;
+
+# A search method is a function (callable) which takes a search representation
+# and returns a list of moves that solves the representation (goes from start to goal)
+SearchMethod = Callable[[SearchRepresentation[Any]], List[util.Move]]
+
+
+# noinspection PyUnusedLocal
+def cheating(representation: SearchRepresentation[Any]) -&gt; List[util.Move]:
+    &#34;&#34;&#34;
+    The cheating search method uses a predefined set of moves
+    to solve a layout (only some layouts are defined).
+    &#34;&#34;&#34;
+    # get layout name from command line arguments
+    if &#39;-l&#39; in sys.argv:
+        layout = sys.argv[sys.argv.index(&#39;-l&#39;) + 1]
+    elif &#39;--layout&#39; in sys.argv:
+        layout = sys.argv[sys.argv.index(&#39;--layout&#39;) + 1]
+    else:
+        layout = &#39;mediumClassic&#39;
+
+    # define abbreviations for moves
+    moves = {&#39;u&#39;: util.Move.up,
+             &#39;r&#39;: util.Move.right,
+             &#39;d&#39;: util.Move.down,
+             &#39;l&#39;: util.Move.left}
+
+    # define cheats for layouts
+    cheats = {&#39;tinyMaze&#39;: &#39;ddldlldl&#39;}
+
+    if layout not in cheats:
+        raise NotImplementedError(&#39;cheat moves have not been defined for this layout&#39;)
+
+    return [moves[move] for move in cheats[layout]]
+
+
+&#34;&#34;&#34;
+Search heuristic
+&#34;&#34;&#34;
+
+# a search heuristic is a function (callable) that takes two arguments:
+# a search state and a search representation. it returns a number
+# representing an approximation (lower bound) of the cost from the given state
+# to the goal of the given representation
+# not all heuristics are generic: some are only useful for certain representations
+SearchHeuristic = Callable[[StateType, SearchRepresentation[StateType]], float]
+
+
+# noinspection PyUnusedLocal
+def null(vector: util.Vector, representation: SearchRepresentation[Any]) -&gt; int:
+    &#34;&#34;&#34;
+    The null heuristic is a trivial lower bound. It is a useless but valid heuristic.
+    &#34;&#34;&#34;
+    return 0
+
+
+def manhattan(vector: util.Vector, representation: PositionSearchRepresentation) -&gt; int:
+    &#34;&#34;&#34;
+    The manhattan heuristic uses the Manhattan distance to the goal to determine its value.
+    &#34;&#34;&#34;
+    return util.manhattan(vector, representation.goal)
+
+
+def euclidean(vector: util.Vector, representation: PositionSearchRepresentation) -&gt; float:
+    &#34;&#34;&#34;
+    The euclidean heuristic uses the Euclidean distance to the goal to determine its value.
+    &#34;&#34;&#34;
+    return util.euclidean(vector, representation.goal)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="pacman.search.StateType"><code class="name">var <span class="ident">StateType</span></code></dt>
+<dd>
+<section class="desc"><p>A search space consists of states which are of a certain type.
+This variable represents a generic state type for a search space</p></section>
+</dd>
+<dt id="pacman.search.Successor"><code class="name">var <span class="ident">Successor</span></code></dt>
+<dd>
+<section class="desc"><p>When transitions (moves) are applied to states in a search space,
+the new states that are reached are called successors.
+A Successor is a tuple that contains the successor state, a list of moves
+that was used to transition to it, and the cost of making this transition</p></section>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pacman.search.cheating"><code class="name flex">
+<span>def <span class="ident">cheating</span></span>(<span>representation)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The cheating search method uses a predefined set of moves
+to solve a layout (only some layouts are defined).</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cheating(representation: SearchRepresentation[Any]) -&gt; List[util.Move]:
+    &#34;&#34;&#34;
+    The cheating search method uses a predefined set of moves
+    to solve a layout (only some layouts are defined).
+    &#34;&#34;&#34;
+    # get layout name from command line arguments
+    if &#39;-l&#39; in sys.argv:
+        layout = sys.argv[sys.argv.index(&#39;-l&#39;) + 1]
+    elif &#39;--layout&#39; in sys.argv:
+        layout = sys.argv[sys.argv.index(&#39;--layout&#39;) + 1]
+    else:
+        layout = &#39;mediumClassic&#39;
+
+    # define abbreviations for moves
+    moves = {&#39;u&#39;: util.Move.up,
+             &#39;r&#39;: util.Move.right,
+             &#39;d&#39;: util.Move.down,
+             &#39;l&#39;: util.Move.left}
+
+    # define cheats for layouts
+    cheats = {&#39;tinyMaze&#39;: &#39;ddldlldl&#39;}
+
+    if layout not in cheats:
+        raise NotImplementedError(&#39;cheat moves have not been defined for this layout&#39;)
+
+    return [moves[move] for move in cheats[layout]]</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.euclidean"><code class="name flex">
+<span>def <span class="ident">euclidean</span></span>(<span>vector, representation)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The euclidean heuristic uses the Euclidean distance to the goal to determine its value.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def euclidean(vector: util.Vector, representation: PositionSearchRepresentation) -&gt; float:
+    &#34;&#34;&#34;
+    The euclidean heuristic uses the Euclidean distance to the goal to determine its value.
+    &#34;&#34;&#34;
+    return util.euclidean(vector, representation.goal)</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.manhattan"><code class="name flex">
+<span>def <span class="ident">manhattan</span></span>(<span>vector, representation)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The manhattan heuristic uses the Manhattan distance to the goal to determine its value.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def manhattan(vector: util.Vector, representation: PositionSearchRepresentation) -&gt; int:
+    &#34;&#34;&#34;
+    The manhattan heuristic uses the Manhattan distance to the goal to determine its value.
+    &#34;&#34;&#34;
+    return util.manhattan(vector, representation.goal)</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.null"><code class="name flex">
+<span>def <span class="ident">null</span></span>(<span>vector, representation)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The null heuristic is a trivial lower bound. It is a useless but valid heuristic.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def null(vector: util.Vector, representation: SearchRepresentation[Any]) -&gt; int:
+    &#34;&#34;&#34;
+    The null heuristic is a trivial lower bound. It is a useless but valid heuristic.
+    &#34;&#34;&#34;
+    return 0</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.standard_pathcost"><code class="name flex">
+<span>def <span class="ident">standard_pathcost</span></span>(<span>path, start, walls, cost_fn=&lt;function &lt;lambda&gt;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A helper function that calculates the cost of a list of moves,
+with the possibility to give a cost function that defines
+the cost of each move.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def standard_pathcost(path: List[util.Move], start: StateType, walls: array.Array,
+                      cost_fn: PathCostFunction = lambda x: 1
+                      ) -&gt; float:
+    &#34;&#34;&#34;
+    A helper function that calculates the cost of a list of moves,
+    with the possibility to give a cost function that defines
+    the cost of each move.
+    &#34;&#34;&#34;
+    vector = start
+    cost = 0
+    for direction in path:
+        vector += direction.vector
+        if walls[vector]:
+            return float(&#39;inf&#39;)
+        cost += cost_fn(vector)
+    return cost</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pacman.search.AllDotSearchRepresentation"><code class="flex name class">
+<span>class <span class="ident">AllDotSearchRepresentation</span></span>
+<span>(</span><span>gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This representation defines a search space where the goal is to find all dots in the maze.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AllDotSearchRepresentation(SearchRepresentation[AllDotSearchState]):
+    &#34;&#34;&#34;
+    This representation defines a search space where the goal is to find all dots in the maze.
+    &#34;&#34;&#34;
+    AllDotSuccessor = Successor[AllDotSearchState]  # the successor type is based on the state type
+
+    def __init__(self, gstate: gamestate.Gamestate) -&gt; None:
+        super().__init__(gstate)
+        self.start_state = AllDotSearchState(gstate.pacman, frozenset(gstate.dots.list()))
+        self.walls = gstate.walls
+
+    @property
+    def start(self) -&gt; AllDotSearchState:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        return self.start_state
+
+    def is_goal(self, state: AllDotSearchState) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        super().is_goal(state.vector)
+        return not state.dots
+
+    def successors(self, state: AllDotSearchState) -&gt; List[AllDotSuccessor]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        successors = []
+        for move in util.Move.no_stop:
+            new_vector = state.vector + move.vector
+            if not self.walls[new_vector]:
+                new_dots = state.dots - {new_vector}
+                successor = (AllDotSearchState(new_vector, new_dots), [move], 1)
+                successors.append(successor)
+        return successors
+
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        return standard_pathcost(path, self.start_state.vector, self.walls)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.search.SearchRepresentation" href="#pacman.search.SearchRepresentation">SearchRepresentation</a></li>
+<li>abc.ABC</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.search.AllDotSearchRepresentation.AllDotSuccessor"><code class="name">var <span class="ident">AllDotSuccessor</span></code></dt>
+<dd>
+<section class="desc"><p>The central part of internal API.</p>
+<p>This represents a generic version of type 'origin' with type arguments 'params'.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have 'name' always set. If 'inst' is False, then the alias can't be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p></section>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.search.SearchRepresentation" href="#pacman.search.SearchRepresentation">SearchRepresentation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.search.SearchRepresentation.is_goal" href="#pacman.search.SearchRepresentation.is_goal">is_goal</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.pathcost" href="#pacman.search.SearchRepresentation.pathcost">pathcost</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.start" href="#pacman.search.SearchRepresentation.start">start</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.successors" href="#pacman.search.SearchRepresentation.successors">successors</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.search.AllDotSearchState"><code class="flex name class">
+<span>class <span class="ident">AllDotSearchState</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>AllDotSearchState(vector, dots)</p></section>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.tuple</li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pacman.search.AllDotSearchState.dots"><code class="name">var <span class="ident">dots</span></code></dt>
+<dd>
+<section class="desc"><p>Alias for field number 1</p></section>
+</dd>
+<dt id="pacman.search.AllDotSearchState.vector"><code class="name">var <span class="ident">vector</span></code></dt>
+<dd>
+<section class="desc"><p>Alias for field number 0</p></section>
+</dd>
+</dl>
+</dd>
+<dt id="pacman.search.PositionSearchRepresentation"><code class="flex name class">
+<span>class <span class="ident">PositionSearchRepresentation</span></span>
+<span>(</span><span>gstate, goal=Vector(x=1, y=1), cost_fn=&lt;function PositionSearchRepresentation.&lt;lambda&gt;&gt;)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A search representation that has as its goal a certain position.
+Its state type is a Vector.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PositionSearchRepresentation(SearchRepresentation[util.Vector]):
+    &#34;&#34;&#34;
+    A search representation that has as its goal a certain position.
+    Its state type is a Vector.
+    &#34;&#34;&#34;
+    PositionSuccessor = Successor[util.Vector]  # the successor type is based on the state type (Vector)
+
+    def __init__(self, gstate: gamestate.Gamestate,
+                 goal: util.Vector = util.Vector(1, 1),
+                 cost_fn: PathCostFunction = lambda x: 1) -&gt; None:
+        super().__init__(gstate)
+        self.start_state = gstate.pacman
+        self.goal = goal
+        self.cost_fn = cost_fn
+        self.walls = gstate.walls
+
+    @property
+    def start(self) -&gt; util.Vector:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        return self.start_state
+
+    def is_goal(self, state: util.Vector) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        super().is_goal(state)
+        return state == self.goal
+
+    def successors(self, state) -&gt; List[PositionSuccessor]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        successors = []
+        for move in util.Move.no_stop:
+            new_vector = state + move.vector
+            if not self.walls[new_vector]:
+                cost = self.cost_fn(new_vector)
+                successor = (new_vector, [move], cost)
+                successors.append(successor)
+        return successors
+
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        return standard_pathcost(path, self.start, self.walls, self.cost_fn)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.search.SearchRepresentation" href="#pacman.search.SearchRepresentation">SearchRepresentation</a></li>
+<li>abc.ABC</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.search.PositionSearchRepresentation.PositionSuccessor"><code class="name">var <span class="ident">PositionSuccessor</span></code></dt>
+<dd>
+<section class="desc"><p>The central part of internal API.</p>
+<p>This represents a generic version of type 'origin' with type arguments 'params'.
+There are two kind of these aliases: user defined and special. The special ones
+are wrappers around builtin collections and ABCs in collections.abc. These must
+have 'name' always set. If 'inst' is False, then the alias can't be instantiated,
+this is used by e.g. typing.List and typing.Dict.</p></section>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.search.SearchRepresentation" href="#pacman.search.SearchRepresentation">SearchRepresentation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.search.SearchRepresentation.is_goal" href="#pacman.search.SearchRepresentation.is_goal">is_goal</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.pathcost" href="#pacman.search.SearchRepresentation.pathcost">pathcost</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.start" href="#pacman.search.SearchRepresentation.start">start</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.successors" href="#pacman.search.SearchRepresentation.successors">successors</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.search.SearchRepresentation"><code class="flex name class">
+<span>class <span class="ident">SearchRepresentation</span></span>
+<span>(</span><span>gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A SearchRepresentation defines a search space.
+It does so by defining the start state,
+the goal test, and the successor function.
+In addition the representation can calculate the
+path cost of a path through the space.</p>
+<p>A SearchRepresentation uses a StateType
+the definition of its methods, which
+is simply the type of the states in the search space.</p>
+<p>A search representation also keeps track of
+the expansion order of states, which are used
+later by SearchAgent for its cell values.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SearchRepresentation(abc.ABC, Generic[StateType]):
+    &#34;&#34;&#34;
+    A SearchRepresentation defines a search space.
+    It does so by defining the start state,
+    the goal test, and the successor function.
+    In addition the representation can calculate the
+    path cost of a path through the space.
+
+    A SearchRepresentation uses a StateType
+    the definition of its methods, which
+    is simply the type of the states in the search space.
+
+    A search representation also keeps track of
+    the expansion order of states, which are used
+    later by SearchAgent for its cell values.
+    &#34;&#34;&#34;
+
+    def __init__(self, gstate: gamestate.Gamestate):
+        self.expansion_count = 0
+        self.expansion_order = array.Array([[None] * gstate.shape.y for _ in range(gstate.shape.x)])
+
+    @property
+    @abc.abstractmethod
+    def start(self) -&gt; StateType:
+        &#34;&#34;&#34;
+        The initial state of the representation,
+        from which searching begins.
+        &#34;&#34;&#34;
+        pass
+
+    def is_goal(self, state: StateType) -&gt; bool:
+        &#34;&#34;&#34;
+        Whether the given state is a goal state in this representations.
+        The first line should be `super().is_goal(pacpos)`,
+        where `pacpos` is the position of pacman in the given state,
+        in order for SearchAgents&#39;s cell values to function.
+        &#34;&#34;&#34;
+        self.expansion_order[state] = self.expansion_count
+        self.expansion_count += 1
+        return False
+
+    @abc.abstractmethod
+    def successors(self, state: StateType) -&gt; List[Successor[StateType]]:
+        &#34;&#34;&#34;
+        Get all successor states of the given state in this representation.
+        &#34;&#34;&#34;
+        pass
+
+    @abc.abstractmethod
+    def pathcost(self, path: List[util.Move]) -&gt; float:
+        &#34;&#34;&#34;
+        Get the path cost of the given list of moves (executed from the start state).
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.search.PositionSearchRepresentation" href="#pacman.search.PositionSearchRepresentation">PositionSearchRepresentation</a></li>
+<li><a title="pacman.search.AllDotSearchRepresentation" href="#pacman.search.AllDotSearchRepresentation">AllDotSearchRepresentation</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pacman.search.SearchRepresentation.start"><code class="name">var <span class="ident">start</span></code></dt>
+<dd>
+<section class="desc"><p>The initial state of the representation,
+from which searching begins.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+@abc.abstractmethod
+def start(self) -&gt; StateType:
+    &#34;&#34;&#34;
+    The initial state of the representation,
+    from which searching begins.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.search.SearchRepresentation.is_goal"><code class="name flex">
+<span>def <span class="ident">is_goal</span></span>(<span>self, state)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Whether the given state is a goal state in this representations.
+The first line should be <code>super().is_goal(pacpos)</code>,
+where <code>pacpos</code> is the position of pacman in the given state,
+in order for SearchAgents's cell values to function.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_goal(self, state: StateType) -&gt; bool:
+    &#34;&#34;&#34;
+    Whether the given state is a goal state in this representations.
+    The first line should be `super().is_goal(pacpos)`,
+    where `pacpos` is the position of pacman in the given state,
+    in order for SearchAgents&#39;s cell values to function.
+    &#34;&#34;&#34;
+    self.expansion_order[state] = self.expansion_count
+    self.expansion_count += 1
+    return False</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.SearchRepresentation.pathcost"><code class="name flex">
+<span>def <span class="ident">pathcost</span></span>(<span>self, path)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the path cost of the given list of moves (executed from the start state).</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def pathcost(self, path: List[util.Move]) -&gt; float:
+    &#34;&#34;&#34;
+    Get the path cost of the given list of moves (executed from the start state).
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="pacman.search.SearchRepresentation.successors"><code class="name flex">
+<span>def <span class="ident">successors</span></span>(<span>self, state)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get all successor states of the given state in this representation.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def successors(self, state: StateType) -&gt; List[Successor[StateType]]:
+    &#34;&#34;&#34;
+    Get all successor states of the given state in this representation.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pacman" href="index.html">pacman</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="pacman.search.StateType" href="#pacman.search.StateType">StateType</a></code></li>
+<li><code><a title="pacman.search.Successor" href="#pacman.search.Successor">Successor</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pacman.search.cheating" href="#pacman.search.cheating">cheating</a></code></li>
+<li><code><a title="pacman.search.euclidean" href="#pacman.search.euclidean">euclidean</a></code></li>
+<li><code><a title="pacman.search.manhattan" href="#pacman.search.manhattan">manhattan</a></code></li>
+<li><code><a title="pacman.search.null" href="#pacman.search.null">null</a></code></li>
+<li><code><a title="pacman.search.standard_pathcost" href="#pacman.search.standard_pathcost">standard_pathcost</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pacman.search.AllDotSearchRepresentation" href="#pacman.search.AllDotSearchRepresentation">AllDotSearchRepresentation</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.search.AllDotSearchRepresentation.AllDotSuccessor" href="#pacman.search.AllDotSearchRepresentation.AllDotSuccessor">AllDotSuccessor</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.search.AllDotSearchState" href="#pacman.search.AllDotSearchState">AllDotSearchState</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.search.AllDotSearchState.dots" href="#pacman.search.AllDotSearchState.dots">dots</a></code></li>
+<li><code><a title="pacman.search.AllDotSearchState.vector" href="#pacman.search.AllDotSearchState.vector">vector</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.search.PositionSearchRepresentation" href="#pacman.search.PositionSearchRepresentation">PositionSearchRepresentation</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.search.PositionSearchRepresentation.PositionSuccessor" href="#pacman.search.PositionSearchRepresentation.PositionSuccessor">PositionSuccessor</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.search.SearchRepresentation" href="#pacman.search.SearchRepresentation">SearchRepresentation</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.search.SearchRepresentation.is_goal" href="#pacman.search.SearchRepresentation.is_goal">is_goal</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.pathcost" href="#pacman.search.SearchRepresentation.pathcost">pathcost</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.start" href="#pacman.search.SearchRepresentation.start">start</a></code></li>
+<li><code><a title="pacman.search.SearchRepresentation.successors" href="#pacman.search.SearchRepresentation.successors">successors</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

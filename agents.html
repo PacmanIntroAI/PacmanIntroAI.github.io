@@ -1,0 +1,1773 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.2" />
+<title>pacman.agents API documentation</title>
+<meta name="description" content="This file describes the agents that are available in the Pacman game." />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>pacman.agents</code></h1>
+</header>
+<section id="section-intro">
+<p>This file describes the agents that are available in the Pacman game.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+This file describes the agents that are available in the Pacman game.
+&#34;&#34;&#34;
+
+import abc
+import numbers
+import random
+from typing import Any, Callable, List, Type, Union
+
+from . import array, displays, gamestate, search, tech_util, util
+
+
+class Agent(metaclass=abc.ABCMeta):
+    &#34;&#34;&#34;
+    An agent is an active participant in the Pacman game.
+    Pacman himself and the ghosts are agents.
+    &#34;&#34;&#34;
+
+    def __init__(self, agent_id):
+        self.id = agent_id
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        pass
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass
+
+
+class PacmanAgent(Agent, abc.ABC):
+    &#34;&#34;&#34;
+    A subclass of Agent, this class describes the Pacman agent specifically.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(0)
+        self._cell_values = None
+
+    @property
+    def cell_values(self) -&gt; array.Array[Union[numbers.Number, None]]:
+        &#34;&#34;&#34;
+        A Pacman agent can determine an arbitrary numerical value for
+        each cell of the game grid. These values are used at the start
+        of the game (after preparation) to be drawn onto the game
+        graphics. This is mostly used by the SearchAgent to visualise
+        the node expansion order.
+        &#34;&#34;&#34;
+        return self._cell_values
+
+    def prepare(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        self._cell_values = array.Array([[None] * gstate.shape.y for _ in range(gstate.shape.x)])
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass
+
+
+class KeyboardAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent is controllable by keyboard input.
+    &#34;&#34;&#34;
+
+    def __init__(self, display: displays.Display):
+        super().__init__()
+        self.display = display
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        sym = self.display.get_keypress()
+        if sym is not None:
+            moves = {&#39;Up&#39;: util.Move.up,
+                     &#39;Down&#39;: util.Move.down,
+                     &#39;Right&#39;: util.Move.right,
+                     &#39;Left&#39;: util.Move.left}
+            if sym in moves:
+                move = moves[sym]
+                if move in gstate.legal_moves_vector(gstate.agents[self.id]):
+                    return move
+        return util.Move.stop
+
+
+class GoLeftAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent always goes left, if this is a valid move (not a wall)..
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        if util.Move.left in gstate.legal_moves_vector(vector):
+            return util.Move.left
+        else:
+            return util.Move.stop
+
+
+class GoRightAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent always goes right, if this is a valid move (not a wall)..
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        if util.Move.right in gstate.legal_moves_vector(vector):
+            return util.Move.right
+        else:
+            return util.Move.stop
+
+
+&#34;&#34;&#34;
+Search agents
+&#34;&#34;&#34;
+
+
+class SearchAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent relies on search to find a path to its goal.
+    In order to execute a search, the agent needs at least two things.
+    First, it needs a Search Representation. This is an object
+    that tell the agent what the search space looks like (see search.py).
+    Second, it needs a Search Method. This is a function that performs
+    the actual search, based on the Search Representation (see search.py).
+    If so, the agent also needs to receive this.
+    &#34;&#34;&#34;
+
+    def __init__(self, representation_type: Type[search.SearchRepresentation[Any]], method: search.SearchMethod):
+        super().__init__()
+        self.representation_type = representation_type
+        self.method = method
+        self.actions = None
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        super().prepare(gstate)
+        print(f&#39;[SearchAgent] using method {self.method.__name__}&#39;)
+        print(f&#39;[SearchAgent] using representation {self.representation_type.__name__}&#39;)
+
+        # here, the SearchAgent does all the work
+        # of running the Search Method and getting
+        # the list of actions that it will execute
+        representation = self.representation_type(gstate)
+        self.actions = self.run_search(representation)
+        self._cell_values = representation.expansion_order
+
+        if self.actions is not None:
+            print(f&#39;[SearchAgent] path found with length {len(self.actions)}&#39;
+                  f&#39; and pathcost {representation.pathcost(self.actions)}&#39;)
+            print(f&#39;[SearchAgent] search nodes expanded: {representation.expansion_count}&#39;)
+        else:
+            print(&#39;Warning! None returned, search failed!&#39;)
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        # the SearchAgent uses the list of actions that
+        # it calculated in `prepare` to give each move in order
+        if self.actions:
+            return self.actions.pop(0)
+        else:
+            return util.Move.stop
+
+    def run_search(self, representation: search.SearchRepresentation) -&gt; List[util.Move]:
+        &#34;&#34;&#34;
+        The SearchAgent runs the actual Method,
+        giving it the Representation and possibly Heuristic.
+        Some Representations will give multidimensional
+        lists of Moves (lists of lists), so we need to
+        flatten the result to a simple list.
+        &#34;&#34;&#34;
+        return tech_util.flatten_2d(self.method(representation))
+
+
+class StayLeftSearchAgent(SearchAgent):
+    &#34;&#34;&#34;
+    This SearchAgent prefers to stay left,
+    and achieves this through an appropriate SearchRepresentation.
+    &#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+
+        def cost_fn(pos: util.Vector):
+            return 2 ** pos.x
+        self.representation_type = lambda gstate: search.PositionSearchRepresentation(gstate, cost_fn=cost_fn)
+        super().prepare(gstate)
+
+
+class StayRightSearchAgent(SearchAgent):
+    &#34;&#34;&#34;
+    This SearchAgent prefers to stay right,
+    and achieves this through an appropriate SearchRepresentation.
+    &#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        def cost_fn(pos: util.Vector):
+            return 0.5 ** pos.x
+        self.representation_type = lambda gstate: search.PositionSearchRepresentation(gstate, cost_fn=cost_fn)
+        super().prepare(gstate)
+
+
+&#34;&#34;&#34;
+Reflex agents
+&#34;&#34;&#34;
+
+
+class ReflexAgent(PacmanAgent, abc.ABC):
+    &#34;&#34;&#34;
+    This agent bases its action on reflexes.
+    Each turn, it evaluates which single move results in the best
+    next gamestate. It then executes that move.
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        moves = gstate.legal_moves_vector(gstate.agents[self.id])
+        scores = {move: self.evaluate(gstate.copy, move) for move in moves}
+        max_score = max(scores.values())
+        max_moves = [move for move in moves if scores[move] == max_score]
+        return random.choice(max_moves)
+
+    @abc.abstractmethod
+    def evaluate(self, gstate: gamestate.Gamestate, move: util.Move) -&gt; numbers.Number:
+        &#34;&#34;&#34;
+        This method is used by the reflex agent to determine
+        the value of a given move if it would be used in a given gamestate.
+        &#34;&#34;&#34;
+        pass
+
+
+class ScoreReflexAgent(ReflexAgent):
+    &#34;&#34;&#34;
+    This reflex agent evaluates a gamestate
+    based solely on Pacman&#39;s score in that gamestate.
+    &#34;&#34;&#34;
+
+    def evaluate(self, gstate: gamestate.Gamestate, move: util.Move) -&gt; numbers.Number:
+        &#34;&#34;&#34;
+        This method is used by the reflex agent to determine
+        the value of a given move if it would be used in a given gamestate.
+        &#34;&#34;&#34;
+        successor = gstate.successor(self.id, move)
+        return successor.score
+
+
+&#34;&#34;&#34;
+Adversarial agents
+&#34;&#34;&#34;
+
+# a gamestate evaluation function takes a gamestate
+# and returns some number representing how good it is
+GamestateEvaluationFunction = Callable[[gamestate.Gamestate], numbers.Number]
+
+
+def score_evaluate(gstate: gamestate.Gamestate) -&gt; int:
+    &#34;&#34;&#34;
+    This gamestate evaluation function simply returns the score of the gamestate
+    &#34;&#34;&#34;
+    return gstate.score
+
+
+class AdversarialAgent(PacmanAgent, abc.ABC):
+    &#34;&#34;&#34;
+    An adversarial agent uses some sort of prediction
+    of the enemy&#39;s choices in order to determine what
+    is the best choice for Pacman. It only predicts choices
+    up to a certain depth, and it uses an evaluation function
+    to determine how good any given gamestate is for Pacman.
+    &#34;&#34;&#34;
+
+    def __init__(self, depth: int, evaluate: GamestateEvaluationFunction):
+        super().__init__()
+        self.depth = depth
+        self.evaluate = evaluate
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass
+
+
+&#34;&#34;&#34;
+Ghost agents
+&#34;&#34;&#34;
+
+
+class GhostAgent(Agent, abc.ABC):
+    &#34;&#34;&#34;
+    These agents are meant to control the ghosts in the Pacman world.
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        options, weights = self.distribution(gstate)
+        if not options:
+            return util.Move.stop
+        return random.choices(options, weights).pop()
+
+    @abc.abstractmethod
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        &#34;&#34;&#34;
+        Based on the given gamestate, this method returns a Distribution
+        over moves that the agent might make, with the value of each move
+        representing the probability that the agent should make that move.
+        &#34;&#34;&#34;
+        pass
+
+    def valid_moves(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        This method returns the valid moves for a ghost agent.
+        A ghost cannot move backwards in a corridor, except when
+        that is the only move to make (a dead end).
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        facing = gstate.facings[self.id]
+        legal_moves = set(gstate.legal_moves_vector(vector)) - {util.Move.stop}
+        if len(legal_moves) == 1:
+            return legal_moves
+        else:
+            return set(legal_moves) - {facing.opposite}
+
+
+class RandomGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A random ghost agent uses a uniform distribution over all
+    possible moves, effectively making their next move random.
+    &#34;&#34;&#34;
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        &#34;&#34;&#34;
+        Based on the given gamestate, this method returns a Distribution
+        over moves that the agent might make, with the value of each move
+        representing the probability that the agent should make that move.
+        &#34;&#34;&#34;
+        options = self.valid_moves(gstate)
+        return list(options), [1] * len(options)
+
+class ChasingGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A semi-random ghost that chases Pacman when not scared,
+    and runs away from Pacman when scared, but with fixed probability
+    does a random move instead.
+    &#34;&#34;&#34;
+    random_probability = 0.2
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        player_position = gstate.pacman
+        ghost_position = gstate.agents[self.id]
+        is_scared = gstate.timers[self.id - 1]
+
+        # Divide random_probability among all moves
+        moves = self.valid_moves(gstate)
+        distr = dict((move, self.random_probability / len(moves)) for move in moves)
+
+        # Divide 1-random_probability over all best moves (towards or away from player depending on scared timer)
+        player_distances = [util.manhattan(player_position, ghost_position + move.vector) for move in moves]
+        if is_scared:
+            best_dist = max(player_distances)
+        else:
+            best_dist = min(player_distances)
+        best_actions = [move for move, dist in zip(moves, player_distances) if dist == best_dist]
+
+        for move, dist in zip(moves, player_distances):
+            if move in best_actions:
+                distr[move] += (1 - self.random_probability) / len(best_actions)
+
+        return list(distr.keys()), list(distr.values())
+
+
+class TrackGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A ghost that just follows a track determined at the level start.
+    &#34;&#34;&#34;
+    track_length = 10
+    &#34;&#34;&#34;indication of the length of the track, not a guarantee&#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate):
+        self.track_moves, self.track_positions = self.generate_random_track(gstate, self.track_length)
+        self.track_index = 0
+        self.track_error = False
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        track_move = self.track_moves[self.track_index]
+        move = track_move
+        moves = self.valid_moves(gstate)
+
+        if move in moves and not self.track_error:  # check track validity
+            self.track_index = (self.track_index + 1) % len(self.track_positions)
+        else:
+            # Cannot continue on track; try to get back, otherwise wander randomly
+            position = gstate.agents[self.id]
+            back_on_track_moves = [move for move in moves if position + move.vector in self.track_positions and move
+                                   != self.track_moves[self.track_positions.index(position + move.vector)].opposite]
+
+            if len(back_on_track_moves) &gt; 0:
+                move = random.choice(back_on_track_moves)
+                self.track_error = False
+                self.track_index = self.track_positions.index(position + move.vector)
+            else:
+                move = random.choice(list(moves))
+                self.track_error = True
+
+        return [move], [1]
+
+    def generate_random_track(self, gstate: gamestate.Gamestate, length: int):
+        # Algorithm from original Berkeley course
+        track_moves = []
+        track_positions = []
+        start_position = gstate.agents[self.id]
+
+        position = start_position
+        last_move = util.Move.stop
+        while position != start_position or len(track_positions) == 0:
+            moves = gstate.legal_moves_vector(position) - {util.Move.stop}
+            index = len(track_positions)
+            if len(moves) &gt; 1:  # prevent turning back
+                moves = moves - {last_move.opposite}
+            if len(moves) &gt; 1 and index &lt; 2*self.track_length:
+                new_moves = [move for move in moves if position + move.vector not in track_positions]
+                if len(new_moves) &gt; 0:  # avoid returning to a previous point on our track unless we need to return
+                    moves = new_moves
+            if len(moves) &gt; 1 and self.track_length/2 &lt; index &lt; 4*self.track_length and position == track_positions[1]:
+                new_moves = [move for move in moves if position + move.vector != start_position]
+                if len(new_moves) &gt; 0:  # avoid going back to step 1 without going back to the start afterwards.
+                    moves = new_moves   # this pushes for &#34;rounder&#34; trajectory endings, if possible
+
+            if len(moves) &gt; 1:  # bias away from start in first half, towards start afterwards
+                dist = util.manhattan(start_position, position)
+                new_dists = [util.manhattan(start_position, position + move.vector) for move in moves]
+                if index &lt; self.track_length / 2:
+                    new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &gt;= dist]
+                elif index &lt; 4*self.track_length:
+                    new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &lt;= dist]
+                else:  # to prevent getting stuck, we start forcing it to go back asap
+                    new_moves = [(move, track_positions.index(position + move.vector)) for move in moves
+                                 if position + move.vector in track_positions]
+                    if len(new_moves) &gt; 0:
+                        new_moves = [min(new_moves, key=lambda x: x[1])[0]]
+                if len(new_moves) &gt; 0:
+                    moves = new_moves
+
+            last_move = random.choice(list(moves))
+            track_positions.append(position)
+            track_moves.append(last_move)
+            position = position + last_move.vector
+
+        return track_moves, track_positions</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="pacman.agents.score_evaluate"><code class="name flex">
+<span>def <span class="ident">score_evaluate</span></span>(<span>gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This gamestate evaluation function simply returns the score of the gamestate</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def score_evaluate(gstate: gamestate.Gamestate) -&gt; int:
+    &#34;&#34;&#34;
+    This gamestate evaluation function simply returns the score of the gamestate
+    &#34;&#34;&#34;
+    return gstate.score</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="pacman.agents.AdversarialAgent"><code class="flex name class">
+<span>class <span class="ident">AdversarialAgent</span></span>
+<span>(</span><span>depth, evaluate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An adversarial agent uses some sort of prediction
+of the enemy's choices in order to determine what
+is the best choice for Pacman. It only predicts choices
+up to a certain depth, and it uses an evaluation function
+to determine how good any given gamestate is for Pacman.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AdversarialAgent(PacmanAgent, abc.ABC):
+    &#34;&#34;&#34;
+    An adversarial agent uses some sort of prediction
+    of the enemy&#39;s choices in order to determine what
+    is the best choice for Pacman. It only predicts choices
+    up to a certain depth, and it uses an evaluation function
+    to determine how good any given gamestate is for Pacman.
+    &#34;&#34;&#34;
+
+    def __init__(self, depth: int, evaluate: GamestateEvaluationFunction):
+        super().__init__()
+        self.depth = depth
+        self.evaluate = evaluate
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.Agent"><code class="flex name class">
+<span>class <span class="ident">Agent</span></span>
+<span>(</span><span>agent_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An agent is an active participant in the Pacman game.
+Pacman himself and the ghosts are agents.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Agent(metaclass=abc.ABCMeta):
+    &#34;&#34;&#34;
+    An agent is an active participant in the Pacman game.
+    Pacman himself and the ghosts are agents.
+    &#34;&#34;&#34;
+
+    def __init__(self, agent_id):
+        self.id = agent_id
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        pass
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.agents.Agent.move"><code class="name flex">
+<span>def <span class="ident">move</span></span>(<span>self, gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This method gets called every turn, asking the agent
+what move they want to make based on the current gamestate.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+    &#34;&#34;&#34;
+    This method gets called every turn, asking the agent
+    what move they want to make based on the current gamestate.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="pacman.agents.Agent.prepare"><code class="name flex">
+<span>def <span class="ident">prepare</span></span>(<span>self, gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Called before the start of a game, this method
+allows the agent to make any necessary preparations
+based on the initial gamestate.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+    &#34;&#34;&#34;
+    Called before the start of a game, this method
+    allows the agent to make any necessary preparations
+    based on the initial gamestate.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="pacman.agents.ChasingGhostAgent"><code class="flex name class">
+<span>class <span class="ident">ChasingGhostAgent</span></span>
+<span>(</span><span>agent_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A semi-random ghost that chases Pacman when not scared,
+and runs away from Pacman when scared, but with fixed probability
+does a random move instead.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ChasingGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A semi-random ghost that chases Pacman when not scared,
+    and runs away from Pacman when scared, but with fixed probability
+    does a random move instead.
+    &#34;&#34;&#34;
+    random_probability = 0.2
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        player_position = gstate.pacman
+        ghost_position = gstate.agents[self.id]
+        is_scared = gstate.timers[self.id - 1]
+
+        # Divide random_probability among all moves
+        moves = self.valid_moves(gstate)
+        distr = dict((move, self.random_probability / len(moves)) for move in moves)
+
+        # Divide 1-random_probability over all best moves (towards or away from player depending on scared timer)
+        player_distances = [util.manhattan(player_position, ghost_position + move.vector) for move in moves]
+        if is_scared:
+            best_dist = max(player_distances)
+        else:
+            best_dist = min(player_distances)
+        best_actions = [move for move, dist in zip(moves, player_distances) if dist == best_dist]
+
+        for move, dist in zip(moves, player_distances):
+            if move in best_actions:
+                distr[move] += (1 - self.random_probability) / len(best_actions)
+
+        return list(distr.keys()), list(distr.values())</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.agents.ChasingGhostAgent.random_probability"><code class="name">var <span class="ident">random_probability</span></code></dt>
+<dd>
+<section class="desc"><p>Convert a string or number to a floating point number, if possible.</p></section>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.GhostAgent.distribution" href="#pacman.agents.GhostAgent.distribution">distribution</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.valid_moves" href="#pacman.agents.GhostAgent.valid_moves">valid_moves</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.GhostAgent"><code class="flex name class">
+<span>class <span class="ident">GhostAgent</span></span>
+<span>(</span><span>agent_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>These agents are meant to control the ghosts in the Pacman world.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GhostAgent(Agent, abc.ABC):
+    &#34;&#34;&#34;
+    These agents are meant to control the ghosts in the Pacman world.
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        options, weights = self.distribution(gstate)
+        if not options:
+            return util.Move.stop
+        return random.choices(options, weights).pop()
+
+    @abc.abstractmethod
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        &#34;&#34;&#34;
+        Based on the given gamestate, this method returns a Distribution
+        over moves that the agent might make, with the value of each move
+        representing the probability that the agent should make that move.
+        &#34;&#34;&#34;
+        pass
+
+    def valid_moves(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        This method returns the valid moves for a ghost agent.
+        A ghost cannot move backwards in a corridor, except when
+        that is the only move to make (a dead end).
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        facing = gstate.facings[self.id]
+        legal_moves = set(gstate.legal_moves_vector(vector)) - {util.Move.stop}
+        if len(legal_moves) == 1:
+            return legal_moves
+        else:
+            return set(legal_moves) - {facing.opposite}</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.RandomGhostAgent" href="#pacman.agents.RandomGhostAgent">RandomGhostAgent</a></li>
+<li><a title="pacman.agents.ChasingGhostAgent" href="#pacman.agents.ChasingGhostAgent">ChasingGhostAgent</a></li>
+<li><a title="pacman.agents.TrackGhostAgent" href="#pacman.agents.TrackGhostAgent">TrackGhostAgent</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.agents.GhostAgent.distribution"><code class="name flex">
+<span>def <span class="ident">distribution</span></span>(<span>self, gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Based on the given gamestate, this method returns a Distribution
+over moves that the agent might make, with the value of each move
+representing the probability that the agent should make that move.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+    &#34;&#34;&#34;
+    Based on the given gamestate, this method returns a Distribution
+    over moves that the agent might make, with the value of each move
+    representing the probability that the agent should make that move.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="pacman.agents.GhostAgent.valid_moves"><code class="name flex">
+<span>def <span class="ident">valid_moves</span></span>(<span>self, gstate)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This method returns the valid moves for a ghost agent.
+A ghost cannot move backwards in a corridor, except when
+that is the only move to make (a dead end).</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def valid_moves(self, gstate: gamestate.Gamestate):
+    &#34;&#34;&#34;
+    This method returns the valid moves for a ghost agent.
+    A ghost cannot move backwards in a corridor, except when
+    that is the only move to make (a dead end).
+    &#34;&#34;&#34;
+    vector = gstate.agents[self.id]
+    facing = gstate.facings[self.id]
+    legal_moves = set(gstate.legal_moves_vector(vector)) - {util.Move.stop}
+    if len(legal_moves) == 1:
+        return legal_moves
+    else:
+        return set(legal_moves) - {facing.opposite}</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.Agent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.Agent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.GoLeftAgent"><code class="flex name class">
+<span>class <span class="ident">GoLeftAgent</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This agent always goes left, if this is a valid move (not a wall)..</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GoLeftAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent always goes left, if this is a valid move (not a wall)..
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        if util.Move.left in gstate.legal_moves_vector(vector):
+            return util.Move.left
+        else:
+            return util.Move.stop</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.GoRightAgent"><code class="flex name class">
+<span>class <span class="ident">GoRightAgent</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This agent always goes right, if this is a valid move (not a wall)..</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class GoRightAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent always goes right, if this is a valid move (not a wall)..
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        vector = gstate.agents[self.id]
+        if util.Move.right in gstate.legal_moves_vector(vector):
+            return util.Move.right
+        else:
+            return util.Move.stop</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.KeyboardAgent"><code class="flex name class">
+<span>class <span class="ident">KeyboardAgent</span></span>
+<span>(</span><span>display)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This agent is controllable by keyboard input.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KeyboardAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent is controllable by keyboard input.
+    &#34;&#34;&#34;
+
+    def __init__(self, display: displays.Display):
+        super().__init__()
+        self.display = display
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        sym = self.display.get_keypress()
+        if sym is not None:
+            moves = {&#39;Up&#39;: util.Move.up,
+                     &#39;Down&#39;: util.Move.down,
+                     &#39;Right&#39;: util.Move.right,
+                     &#39;Left&#39;: util.Move.left}
+            if sym in moves:
+                move = moves[sym]
+                if move in gstate.legal_moves_vector(gstate.agents[self.id]):
+                    return move
+        return util.Move.stop</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.PacmanAgent"><code class="flex name class">
+<span>class <span class="ident">PacmanAgent</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>A subclass of Agent, this class describes the Pacman agent specifically.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PacmanAgent(Agent, abc.ABC):
+    &#34;&#34;&#34;
+    A subclass of Agent, this class describes the Pacman agent specifically.
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        super().__init__(0)
+        self._cell_values = None
+
+    @property
+    def cell_values(self) -&gt; array.Array[Union[numbers.Number, None]]:
+        &#34;&#34;&#34;
+        A Pacman agent can determine an arbitrary numerical value for
+        each cell of the game grid. These values are used at the start
+        of the game (after preparation) to be drawn onto the game
+        graphics. This is mostly used by the SearchAgent to visualise
+        the node expansion order.
+        &#34;&#34;&#34;
+        return self._cell_values
+
+    def prepare(self, gstate: gamestate.Gamestate):
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        self._cell_values = array.Array([[None] * gstate.shape.y for _ in range(gstate.shape.x)])
+
+    @abc.abstractmethod
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.KeyboardAgent" href="#pacman.agents.KeyboardAgent">KeyboardAgent</a></li>
+<li><a title="pacman.agents.GoLeftAgent" href="#pacman.agents.GoLeftAgent">GoLeftAgent</a></li>
+<li><a title="pacman.agents.GoRightAgent" href="#pacman.agents.GoRightAgent">GoRightAgent</a></li>
+<li><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></li>
+<li><a title="pacman.agents.ReflexAgent" href="#pacman.agents.ReflexAgent">ReflexAgent</a></li>
+<li><a title="pacman.agents.AdversarialAgent" href="#pacman.agents.AdversarialAgent">AdversarialAgent</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="pacman.agents.PacmanAgent.cell_values"><code class="name">var <span class="ident">cell_values</span></code></dt>
+<dd>
+<section class="desc"><p>A Pacman agent can determine an arbitrary numerical value for
+each cell of the game grid. These values are used at the start
+of the game (after preparation) to be drawn onto the game
+graphics. This is mostly used by the SearchAgent to visualise
+the node expansion order.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def cell_values(self) -&gt; array.Array[Union[numbers.Number, None]]:
+    &#34;&#34;&#34;
+    A Pacman agent can determine an arbitrary numerical value for
+    each cell of the game grid. These values are used at the start
+    of the game (after preparation) to be drawn onto the game
+    graphics. This is mostly used by the SearchAgent to visualise
+    the node expansion order.
+    &#34;&#34;&#34;
+    return self._cell_values</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.Agent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.Agent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.RandomGhostAgent"><code class="flex name class">
+<span>class <span class="ident">RandomGhostAgent</span></span>
+<span>(</span><span>agent_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A random ghost agent uses a uniform distribution over all
+possible moves, effectively making their next move random.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RandomGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A random ghost agent uses a uniform distribution over all
+    possible moves, effectively making their next move random.
+    &#34;&#34;&#34;
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        &#34;&#34;&#34;
+        Based on the given gamestate, this method returns a Distribution
+        over moves that the agent might make, with the value of each move
+        representing the probability that the agent should make that move.
+        &#34;&#34;&#34;
+        options = self.valid_moves(gstate)
+        return list(options), [1] * len(options)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.GhostAgent.distribution" href="#pacman.agents.GhostAgent.distribution">distribution</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.valid_moves" href="#pacman.agents.GhostAgent.valid_moves">valid_moves</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.ReflexAgent"><code class="flex name class">
+<span>class <span class="ident">ReflexAgent</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This agent bases its action on reflexes.
+Each turn, it evaluates which single move results in the best
+next gamestate. It then executes that move.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ReflexAgent(PacmanAgent, abc.ABC):
+    &#34;&#34;&#34;
+    This agent bases its action on reflexes.
+    Each turn, it evaluates which single move results in the best
+    next gamestate. It then executes that move.
+    &#34;&#34;&#34;
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        moves = gstate.legal_moves_vector(gstate.agents[self.id])
+        scores = {move: self.evaluate(gstate.copy, move) for move in moves}
+        max_score = max(scores.values())
+        max_moves = [move for move in moves if scores[move] == max_score]
+        return random.choice(max_moves)
+
+    @abc.abstractmethod
+    def evaluate(self, gstate: gamestate.Gamestate, move: util.Move) -&gt; numbers.Number:
+        &#34;&#34;&#34;
+        This method is used by the reflex agent to determine
+        the value of a given move if it would be used in a given gamestate.
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.ScoreReflexAgent" href="#pacman.agents.ScoreReflexAgent">ScoreReflexAgent</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.agents.ReflexAgent.evaluate"><code class="name flex">
+<span>def <span class="ident">evaluate</span></span>(<span>self, gstate, move)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This method is used by the reflex agent to determine
+the value of a given move if it would be used in a given gamestate.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abc.abstractmethod
+def evaluate(self, gstate: gamestate.Gamestate, move: util.Move) -&gt; numbers.Number:
+    &#34;&#34;&#34;
+    This method is used by the reflex agent to determine
+    the value of a given move if it would be used in a given gamestate.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.ScoreReflexAgent"><code class="flex name class">
+<span>class <span class="ident">ScoreReflexAgent</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>This reflex agent evaluates a gamestate
+based solely on Pacman's score in that gamestate.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ScoreReflexAgent(ReflexAgent):
+    &#34;&#34;&#34;
+    This reflex agent evaluates a gamestate
+    based solely on Pacman&#39;s score in that gamestate.
+    &#34;&#34;&#34;
+
+    def evaluate(self, gstate: gamestate.Gamestate, move: util.Move) -&gt; numbers.Number:
+        &#34;&#34;&#34;
+        This method is used by the reflex agent to determine
+        the value of a given move if it would be used in a given gamestate.
+        &#34;&#34;&#34;
+        successor = gstate.successor(self.id, move)
+        return successor.score</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.ReflexAgent" href="#pacman.agents.ReflexAgent">ReflexAgent</a></li>
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.ReflexAgent" href="#pacman.agents.ReflexAgent">ReflexAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.ReflexAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.ReflexAgent.evaluate" href="#pacman.agents.ReflexAgent.evaluate">evaluate</a></code></li>
+<li><code><a title="pacman.agents.ReflexAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.ReflexAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.SearchAgent"><code class="flex name class">
+<span>class <span class="ident">SearchAgent</span></span>
+<span>(</span><span>representation_type, method)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This agent relies on search to find a path to its goal.
+In order to execute a search, the agent needs at least two things.
+First, it needs a Search Representation. This is an object
+that tell the agent what the search space looks like (see search.py).
+Second, it needs a Search Method. This is a function that performs
+the actual search, based on the Search Representation (see search.py).
+If so, the agent also needs to receive this.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SearchAgent(PacmanAgent):
+    &#34;&#34;&#34;
+    This agent relies on search to find a path to its goal.
+    In order to execute a search, the agent needs at least two things.
+    First, it needs a Search Representation. This is an object
+    that tell the agent what the search space looks like (see search.py).
+    Second, it needs a Search Method. This is a function that performs
+    the actual search, based on the Search Representation (see search.py).
+    If so, the agent also needs to receive this.
+    &#34;&#34;&#34;
+
+    def __init__(self, representation_type: Type[search.SearchRepresentation[Any]], method: search.SearchMethod):
+        super().__init__()
+        self.representation_type = representation_type
+        self.method = method
+        self.actions = None
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        super().prepare(gstate)
+        print(f&#39;[SearchAgent] using method {self.method.__name__}&#39;)
+        print(f&#39;[SearchAgent] using representation {self.representation_type.__name__}&#39;)
+
+        # here, the SearchAgent does all the work
+        # of running the Search Method and getting
+        # the list of actions that it will execute
+        representation = self.representation_type(gstate)
+        self.actions = self.run_search(representation)
+        self._cell_values = representation.expansion_order
+
+        if self.actions is not None:
+            print(f&#39;[SearchAgent] path found with length {len(self.actions)}&#39;
+                  f&#39; and pathcost {representation.pathcost(self.actions)}&#39;)
+            print(f&#39;[SearchAgent] search nodes expanded: {representation.expansion_count}&#39;)
+        else:
+            print(&#39;Warning! None returned, search failed!&#39;)
+
+    def move(self, gstate: gamestate.Gamestate) -&gt; util.Move:
+        &#34;&#34;&#34;
+        This method gets called every turn, asking the agent
+        what move they want to make based on the current gamestate.
+        &#34;&#34;&#34;
+        # the SearchAgent uses the list of actions that
+        # it calculated in `prepare` to give each move in order
+        if self.actions:
+            return self.actions.pop(0)
+        else:
+            return util.Move.stop
+
+    def run_search(self, representation: search.SearchRepresentation) -&gt; List[util.Move]:
+        &#34;&#34;&#34;
+        The SearchAgent runs the actual Method,
+        giving it the Representation and possibly Heuristic.
+        Some Representations will give multidimensional
+        lists of Moves (lists of lists), so we need to
+        flatten the result to a simple list.
+        &#34;&#34;&#34;
+        return tech_util.flatten_2d(self.method(representation))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.StayLeftSearchAgent" href="#pacman.agents.StayLeftSearchAgent">StayLeftSearchAgent</a></li>
+<li><a title="pacman.agents.StayRightSearchAgent" href="#pacman.agents.StayRightSearchAgent">StayRightSearchAgent</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.agents.SearchAgent.run_search"><code class="name flex">
+<span>def <span class="ident">run_search</span></span>(<span>self, representation)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>The SearchAgent runs the actual Method,
+giving it the Representation and possibly Heuristic.
+Some Representations will give multidimensional
+lists of Moves (lists of lists), so we need to
+flatten the result to a simple list.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_search(self, representation: search.SearchRepresentation) -&gt; List[util.Move]:
+    &#34;&#34;&#34;
+    The SearchAgent runs the actual Method,
+    giving it the Representation and possibly Heuristic.
+    Some Representations will give multidimensional
+    lists of Moves (lists of lists), so we need to
+    flatten the result to a simple list.
+    &#34;&#34;&#34;
+    return tech_util.flatten_2d(self.method(representation))</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.PacmanAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.StayLeftSearchAgent"><code class="flex name class">
+<span>class <span class="ident">StayLeftSearchAgent</span></span>
+<span>(</span><span>representation_type, method)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This SearchAgent prefers to stay left,
+and achieves this through an appropriate SearchRepresentation.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StayLeftSearchAgent(SearchAgent):
+    &#34;&#34;&#34;
+    This SearchAgent prefers to stay left,
+    and achieves this through an appropriate SearchRepresentation.
+    &#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+
+        def cost_fn(pos: util.Vector):
+            return 2 ** pos.x
+        self.representation_type = lambda gstate: search.PositionSearchRepresentation(gstate, cost_fn=cost_fn)
+        super().prepare(gstate)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></li>
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.SearchAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.run_search" href="#pacman.agents.SearchAgent.run_search">run_search</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.StayRightSearchAgent"><code class="flex name class">
+<span>class <span class="ident">StayRightSearchAgent</span></span>
+<span>(</span><span>representation_type, method)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This SearchAgent prefers to stay right,
+and achieves this through an appropriate SearchRepresentation.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StayRightSearchAgent(SearchAgent):
+    &#34;&#34;&#34;
+    This SearchAgent prefers to stay right,
+    and achieves this through an appropriate SearchRepresentation.
+    &#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate) -&gt; None:
+        &#34;&#34;&#34;
+        Called before the start of a game, this method
+        allows the agent to make any necessary preparations
+        based on the initial gamestate.
+        &#34;&#34;&#34;
+        def cost_fn(pos: util.Vector):
+            return 0.5 ** pos.x
+        self.representation_type = lambda gstate: search.PositionSearchRepresentation(gstate, cost_fn=cost_fn)
+        super().prepare(gstate)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></li>
+<li><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.SearchAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+<li><code><a title="pacman.agents.SearchAgent.run_search" href="#pacman.agents.SearchAgent.run_search">run_search</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="pacman.agents.TrackGhostAgent"><code class="flex name class">
+<span>class <span class="ident">TrackGhostAgent</span></span>
+<span>(</span><span>agent_id)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A ghost that just follows a track determined at the level start.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TrackGhostAgent(GhostAgent):
+    &#34;&#34;&#34;
+    A ghost that just follows a track determined at the level start.
+    &#34;&#34;&#34;
+    track_length = 10
+    &#34;&#34;&#34;indication of the length of the track, not a guarantee&#34;&#34;&#34;
+
+    def prepare(self, gstate: gamestate.Gamestate):
+        self.track_moves, self.track_positions = self.generate_random_track(gstate, self.track_length)
+        self.track_index = 0
+        self.track_error = False
+
+    def distribution(self, gstate: gamestate.Gamestate) -&gt; util.Distribution:
+        track_move = self.track_moves[self.track_index]
+        move = track_move
+        moves = self.valid_moves(gstate)
+
+        if move in moves and not self.track_error:  # check track validity
+            self.track_index = (self.track_index + 1) % len(self.track_positions)
+        else:
+            # Cannot continue on track; try to get back, otherwise wander randomly
+            position = gstate.agents[self.id]
+            back_on_track_moves = [move for move in moves if position + move.vector in self.track_positions and move
+                                   != self.track_moves[self.track_positions.index(position + move.vector)].opposite]
+
+            if len(back_on_track_moves) &gt; 0:
+                move = random.choice(back_on_track_moves)
+                self.track_error = False
+                self.track_index = self.track_positions.index(position + move.vector)
+            else:
+                move = random.choice(list(moves))
+                self.track_error = True
+
+        return [move], [1]
+
+    def generate_random_track(self, gstate: gamestate.Gamestate, length: int):
+        # Algorithm from original Berkeley course
+        track_moves = []
+        track_positions = []
+        start_position = gstate.agents[self.id]
+
+        position = start_position
+        last_move = util.Move.stop
+        while position != start_position or len(track_positions) == 0:
+            moves = gstate.legal_moves_vector(position) - {util.Move.stop}
+            index = len(track_positions)
+            if len(moves) &gt; 1:  # prevent turning back
+                moves = moves - {last_move.opposite}
+            if len(moves) &gt; 1 and index &lt; 2*self.track_length:
+                new_moves = [move for move in moves if position + move.vector not in track_positions]
+                if len(new_moves) &gt; 0:  # avoid returning to a previous point on our track unless we need to return
+                    moves = new_moves
+            if len(moves) &gt; 1 and self.track_length/2 &lt; index &lt; 4*self.track_length and position == track_positions[1]:
+                new_moves = [move for move in moves if position + move.vector != start_position]
+                if len(new_moves) &gt; 0:  # avoid going back to step 1 without going back to the start afterwards.
+                    moves = new_moves   # this pushes for &#34;rounder&#34; trajectory endings, if possible
+
+            if len(moves) &gt; 1:  # bias away from start in first half, towards start afterwards
+                dist = util.manhattan(start_position, position)
+                new_dists = [util.manhattan(start_position, position + move.vector) for move in moves]
+                if index &lt; self.track_length / 2:
+                    new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &gt;= dist]
+                elif index &lt; 4*self.track_length:
+                    new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &lt;= dist]
+                else:  # to prevent getting stuck, we start forcing it to go back asap
+                    new_moves = [(move, track_positions.index(position + move.vector)) for move in moves
+                                 if position + move.vector in track_positions]
+                    if len(new_moves) &gt; 0:
+                        new_moves = [min(new_moves, key=lambda x: x[1])[0]]
+                if len(new_moves) &gt; 0:
+                    moves = new_moves
+
+            last_move = random.choice(list(moves))
+            track_positions.append(position)
+            track_moves.append(last_move)
+            position = position + last_move.vector
+
+        return track_moves, track_positions</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></li>
+<li><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="pacman.agents.TrackGhostAgent.track_length"><code class="name">var <span class="ident">track_length</span></code></dt>
+<dd>
+<section class="desc"><p>indication of the length of the track, not a guarantee</p></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="pacman.agents.TrackGhostAgent.generate_random_track"><code class="name flex">
+<span>def <span class="ident">generate_random_track</span></span>(<span>self, gstate, length)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_random_track(self, gstate: gamestate.Gamestate, length: int):
+    # Algorithm from original Berkeley course
+    track_moves = []
+    track_positions = []
+    start_position = gstate.agents[self.id]
+
+    position = start_position
+    last_move = util.Move.stop
+    while position != start_position or len(track_positions) == 0:
+        moves = gstate.legal_moves_vector(position) - {util.Move.stop}
+        index = len(track_positions)
+        if len(moves) &gt; 1:  # prevent turning back
+            moves = moves - {last_move.opposite}
+        if len(moves) &gt; 1 and index &lt; 2*self.track_length:
+            new_moves = [move for move in moves if position + move.vector not in track_positions]
+            if len(new_moves) &gt; 0:  # avoid returning to a previous point on our track unless we need to return
+                moves = new_moves
+        if len(moves) &gt; 1 and self.track_length/2 &lt; index &lt; 4*self.track_length and position == track_positions[1]:
+            new_moves = [move for move in moves if position + move.vector != start_position]
+            if len(new_moves) &gt; 0:  # avoid going back to step 1 without going back to the start afterwards.
+                moves = new_moves   # this pushes for &#34;rounder&#34; trajectory endings, if possible
+
+        if len(moves) &gt; 1:  # bias away from start in first half, towards start afterwards
+            dist = util.manhattan(start_position, position)
+            new_dists = [util.manhattan(start_position, position + move.vector) for move in moves]
+            if index &lt; self.track_length / 2:
+                new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &gt;= dist]
+            elif index &lt; 4*self.track_length:
+                new_moves = [move for move, new_dist in zip(moves, new_dists) if new_dist &lt;= dist]
+            else:  # to prevent getting stuck, we start forcing it to go back asap
+                new_moves = [(move, track_positions.index(position + move.vector)) for move in moves
+                             if position + move.vector in track_positions]
+                if len(new_moves) &gt; 0:
+                    new_moves = [min(new_moves, key=lambda x: x[1])[0]]
+            if len(new_moves) &gt; 0:
+                moves = new_moves
+
+        last_move = random.choice(list(moves))
+        track_positions.append(position)
+        track_moves.append(last_move)
+        position = position + last_move.vector
+
+    return track_moves, track_positions</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="pacman.agents.GhostAgent.distribution" href="#pacman.agents.GhostAgent.distribution">distribution</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.valid_moves" href="#pacman.agents.GhostAgent.valid_moves">valid_moves</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="pacman" href="index.html">pacman</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="pacman.agents.score_evaluate" href="#pacman.agents.score_evaluate">score_evaluate</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="pacman.agents.AdversarialAgent" href="#pacman.agents.AdversarialAgent">AdversarialAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.Agent" href="#pacman.agents.Agent">Agent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.Agent.move" href="#pacman.agents.Agent.move">move</a></code></li>
+<li><code><a title="pacman.agents.Agent.prepare" href="#pacman.agents.Agent.prepare">prepare</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.ChasingGhostAgent" href="#pacman.agents.ChasingGhostAgent">ChasingGhostAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.ChasingGhostAgent.random_probability" href="#pacman.agents.ChasingGhostAgent.random_probability">random_probability</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.GhostAgent" href="#pacman.agents.GhostAgent">GhostAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.GhostAgent.distribution" href="#pacman.agents.GhostAgent.distribution">distribution</a></code></li>
+<li><code><a title="pacman.agents.GhostAgent.valid_moves" href="#pacman.agents.GhostAgent.valid_moves">valid_moves</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.GoLeftAgent" href="#pacman.agents.GoLeftAgent">GoLeftAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.GoRightAgent" href="#pacman.agents.GoRightAgent">GoRightAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.KeyboardAgent" href="#pacman.agents.KeyboardAgent">KeyboardAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.PacmanAgent" href="#pacman.agents.PacmanAgent">PacmanAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.PacmanAgent.cell_values" href="#pacman.agents.PacmanAgent.cell_values">cell_values</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.RandomGhostAgent" href="#pacman.agents.RandomGhostAgent">RandomGhostAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.ReflexAgent" href="#pacman.agents.ReflexAgent">ReflexAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.ReflexAgent.evaluate" href="#pacman.agents.ReflexAgent.evaluate">evaluate</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.ScoreReflexAgent" href="#pacman.agents.ScoreReflexAgent">ScoreReflexAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.SearchAgent" href="#pacman.agents.SearchAgent">SearchAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.SearchAgent.run_search" href="#pacman.agents.SearchAgent.run_search">run_search</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="pacman.agents.StayLeftSearchAgent" href="#pacman.agents.StayLeftSearchAgent">StayLeftSearchAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.StayRightSearchAgent" href="#pacman.agents.StayRightSearchAgent">StayRightSearchAgent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="pacman.agents.TrackGhostAgent" href="#pacman.agents.TrackGhostAgent">TrackGhostAgent</a></code></h4>
+<ul class="">
+<li><code><a title="pacman.agents.TrackGhostAgent.generate_random_track" href="#pacman.agents.TrackGhostAgent.generate_random_track">generate_random_track</a></code></li>
+<li><code><a title="pacman.agents.TrackGhostAgent.track_length" href="#pacman.agents.TrackGhostAgent.track_length">track_length</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
